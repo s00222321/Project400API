@@ -4,10 +4,18 @@ const Action = require("../models/Action");
 
 // Save action to database
 router.post("/save-action", async (req, res) => {
-  const { userId, action, timestamp } = req.body;
+  const { userId, timestamp, reactionTime, finger, hand, gameMode } = req.body;
 
   try {
-    const newAction = new Action({ userId, action, timestamp });
+    const newAction = new Action({
+      userId,   
+      timestamp,     
+      reactionTime,    
+      finger,    
+      hand,           
+      gameMode      
+    });
+    
     const savedAction = await newAction.save();
     res.status(201).json({ message: "Action saved successfully", data: savedAction });
   } catch (err) {
