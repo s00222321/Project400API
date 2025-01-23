@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const dataRoutes = require("./routes/dataRoutes");
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
@@ -14,6 +17,10 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/data", dataRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+
+app.use(errorHandler);
 
 // MongoDB Connection
 mongoose
