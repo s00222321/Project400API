@@ -1,7 +1,8 @@
+const e = require('express');
 const mongoose = require('mongoose');
 
 const PreferencesSchema = new mongoose.Schema({
-    hand: { type: String, required: true, },
+    hand: { type: String, enum: ['Left', 'Right'], default: 'Right' },
     calibration: { type: Number, default: 1 },
 });
 
