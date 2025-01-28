@@ -6,6 +6,7 @@ const dataRoutes = require("./routes/dataRoutes");
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const helmet = require('helmet');
 
 dotenv.config();
 
@@ -14,13 +15,13 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(bodyParser.json());
+app.use(errorHandler);
+app.use(helmet());
 
 // Routes
 app.use("/api/data", dataRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-
-app.use(errorHandler);
 
 // MongoDB Connection
 mongoose

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../middleware/authMiddleware'); // Import the middleware
+const authenticateToken = require('../middleware/authMiddleware');
 const User = require('../models/User');
+const {validatePreferences} = require('../models/validation');
 
 // Get user details (Protected route)
 router.get('/user', authenticateToken, async (req, res) => {
@@ -31,6 +32,10 @@ router.get('/preferences', authenticateToken, async (req, res) => {
 
 // Update user preferences (Protected route)
 router.put('/preferences', authenticateToken, async (req, res) => {
+    const { error } = validatePreferences(req.body.preferences);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     try {
         const user = await User.findByIdAndUpdate(
             req.user.id,
