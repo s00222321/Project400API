@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const helmet = require('helmet');
+const cors = require("cors");
 
 dotenv.config();
 
