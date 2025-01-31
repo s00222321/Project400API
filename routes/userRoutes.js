@@ -4,6 +4,16 @@ const authenticateToken = require('../middleware/authMiddleware');
 const User = require('../models/User');
 const {validatePreferences} = require('../models/validation');
 
+// get all users
+router.get('/users', authenticateToken, async (req, res) => {
+    try {
+        const users = await User.find().select('-password'); // Exclude passwords from all users
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get user details (Protected route)
 router.get('/user', authenticateToken, async (req, res) => {
     try {
