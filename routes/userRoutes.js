@@ -5,7 +5,7 @@ const User = require('../models/User');
 const {validatePreferences} = require('../models/validation');
 
 // get all users
-router.get('/users', authenticateToken, async (req, res) => {
+router.get('/users', async (req, res) => {
     try {
         const users = await User.find().select('-password'); // Exclude passwords from all users
         res.json(users);
