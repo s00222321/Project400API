@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(errorHandler);
 app.use(helmet());
+app.use(cors());
 
 // Routes
 app.use("/api/data", dataRoutes);
