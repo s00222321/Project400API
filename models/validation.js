@@ -15,14 +15,22 @@ const preferencesValidationSchema = Joi.object({
   calibration: Joi.number().default(1).min(0),
 });
 
-// Joi validation for User Schema
+// Joi validation for login
 const loginValidationSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required(),
+});
+
+// Joi validation for register
+const registerValidationSchema = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  email: Joi.string().email().required(),
 });
 
 module.exports = {
   validateAction: (data) => actionValidationSchema.validate(data),
   validateLogin: (data) => loginValidationSchema.validate(data),
   validatePreferences: (data) => preferencesValidationSchema.validate(data),
+  validateRegister: (data) => registerValidationSchema.validate(data),
 };

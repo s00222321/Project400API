@@ -4,20 +4,20 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 const Therapist = require('../models/Therapist');
-const {validateLogin} = require('../models/validation'); 
+import { validateLogin, validateRegister } from '../models/validation';
 
 // Therapist sign-up
 router.post('/register-therapist', async (req, res) => {
     // Validate login data
-    const { error } = validateLogin(req.body);
+    const { error } = validateRegister(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }
 
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const therapist = new Therapist({ username, password: hashedPassword });
+        const therapist = new Therapist({ username, password: hashedPassword, email });
         await therapist.save();
         res.status(201).json({ message: 'Therapist registered successfully!' });
     } catch (err) {
@@ -45,7 +45,7 @@ router.post('/login-therapist', async (req, res) => {
     }
 });
 
-// Therapist sign-up
+// User register
 router.post('/register-user', async (req, res) => {
     // Validate login data
     const { error } = validateLogin(req.body);
