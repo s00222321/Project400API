@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
 const Therapist = require('../models/Therapist');
-import { validateLogin, validateRegister } from '../models/validation';
+const { validateLogin, validateRegister } = require('../models/validation.js');
 
 // Therapist sign-up
 router.post('/register-therapist', async (req, res) => {
