@@ -3,10 +3,50 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/User');
+const Therapist = require('../models/Therapist');
 const {validateLogin} = require('../models/validation'); 
 
-// User sign-up
-router.post('/signup', async (req, res) => {
+// Therapist sign-up
+router.post('/register-therapist', async (req, res) => {
+    // Validate login data
+    const { error } = validateLogin(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
+    const { username, password } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const therapist = new Therapist({ username, password: hashedPassword });
+        await therapist.save();
+        res.status(201).json({ message: 'Therapist registered successfully!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Therapist login
+router.post('/login-therapist', async (req, res) => {
+    // Validate login data
+    const { error } = validateLogin(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+    const { username, password } = req.body;
+    try {
+        const user = await Therapist.findOne({ username });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Therapist sign-up
+router.post('/register-user', async (req, res) => {
     // Validate login data
     const { error } = validateLogin(req.body);
     if (error) {
@@ -25,7 +65,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // User login
-router.post('/login', async (req, res) => {
+router.post('/login-user', async (req, res) => {
     // Validate login data
     const { error } = validateLogin(req.body);
     if (error) {

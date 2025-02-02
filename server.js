@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const dataRoutes = require("./routes/dataRoutes");
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const therapistRoutes = require('./routes/therapistRoutes');
 const errorHandler = require('./middleware/errorHandler');
 const helmet = require('helmet');
 const cors = require("cors");
@@ -24,6 +25,7 @@ app.use(cors());
 app.use("/api/data", dataRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/therapist', therapistRoutes);
 
 // MongoDB Connection
 mongoose

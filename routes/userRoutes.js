@@ -4,7 +4,7 @@ const authenticateToken = require('../middleware/authMiddleware');
 const User = require('../models/User');
 const {validatePreferences} = require('../models/validation');
 
-// get all users
+// get all users by therapist id
 router.get('/users', async (req, res) => {
     try {
         const users = await User.find().select('-password'); // Exclude passwords from all users
