@@ -45,25 +45,6 @@ router.post('/login-therapist', async (req, res) => {
     }
 });
 
-// User register
-router.post('/register-user', async (req, res) => {
-    // Validate login data
-    const { error } = validateLogin(req.body);
-    if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const { username, password } = req.body;
-    try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ username, password: hashedPassword });
-        await user.save();
-        res.status(201).json({ message: 'User registered successfully!' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
 // User login
 router.post('/login-user', async (req, res) => {
     // Validate login data

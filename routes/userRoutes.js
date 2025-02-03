@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authenticateToken = require('../middleware/authMiddleware');
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 const {validatePreferences} = require('../models/validation');
 
 // get all users by therapist id
@@ -56,6 +57,19 @@ router.put('/preferences', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         res.json(user.preferences);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// User register
+router.post('/register-user', async (req, res) => {
+    const { username, password, therapistId, hand} = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({ username, password: hashedPassword, therapistId, preferences: { hand } });
+        await user.save();
+        res.status(201).json({ message: 'User registered successfully!' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
