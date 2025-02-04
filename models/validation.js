@@ -5,7 +5,7 @@ const actionValidationSchema = Joi.object({
   timestamp: Joi.date().default(() => new Date()),
   reactionTime: Joi.number().required().min(0), // Reaction time must be a non-negative number
   finger: Joi.string().required(),
-  hand: Joi.string().valid("right", "left").required(),
+  hand: Joi.string().valid("Right", "Left").required(),
   gameMode: Joi.string().required(),
 });
 

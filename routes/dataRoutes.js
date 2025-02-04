@@ -33,9 +33,10 @@ router.post("/save-action", authenticateToken, async (req, res) => {
 });
 
 // Fetch all actions from database
-router.get("/get-actions", authenticateToken, async (req, res) => {
+router.get("/get-actions/:userId", async (req, res) => {
   try {
-    const actions = await Action.find({ userId: req.user.id });
+    const { userId } = req.params;
+    const actions = await Action.find({ userId });
     res.status(200).json({ data: actions });
   } catch (err) {
     console.error(err);
