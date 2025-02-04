@@ -6,9 +6,10 @@ const bcrypt = require('bcrypt');
 const {validatePreferences} = require('../models/validation');
 
 // get all users by therapist id
-router.get('/users', async (req, res) => {
+router.get('/users/:therapistId', async (req, res) => {
     try {
-        const users = await User.find().select('-password'); // Exclude passwords from all users
+        const { therapistId } = req.params;
+        const users = await User.find({ therapistId }).select('-password');
         res.json(users);
     } catch (err) {
         res.status(500).json({ error: err.message });
