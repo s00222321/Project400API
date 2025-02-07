@@ -44,4 +44,16 @@ router.get("/get-actions/:userId", async (req, res) => {
   }
 });
 
+// Fetch all actions from database
+router.get("/get-actions", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id; 
+    const actions = await Action.find({ userId });
+    res.status(200).json({ data: actions });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching actions", error: err.message });
+  }
+});
+
 module.exports = router;
