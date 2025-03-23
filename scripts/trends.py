@@ -6,8 +6,6 @@ from bson import json_util
 from dotenv import load_dotenv
 from urllib.parse import urlparse
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Load environment variables
 load_dotenv()
