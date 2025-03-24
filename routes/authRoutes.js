@@ -7,21 +7,34 @@ const Therapist = require('../models/Therapist');
 const { validateLogin, validateRegister } = require('../models/validation.js');
 
 // Therapist sign-up
+// routes/authRoutes.js
 router.post('/register-therapist', async (req, res) => {
-    // Validate login data
-    const { error } = validateRegister(req.body);
-    if (error) {
-        return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const { username, password, email } = req.body;
     try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const therapist = new Therapist({ username, password: hashedPassword, email });
+        // Validate registration data
+        const { error } = validateRegister(req.body);
+        if (error) {
+            return res.status(400).json({ message: error.details[0].message });
+        }
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        // Create new therapist
+        const therapist = new Therapist({
+            username: req.body.username,
+            password: hashedPassword,
+            email: req.body.email
+        });
+
+        // Save therapist
         await therapist.save();
         res.status(201).json({ message: 'Therapist registered successfully!' });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Username or email already exists' });
+        }
+        res.status(500).json({ error: error.message });
     }
 });
 

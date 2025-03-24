@@ -11,7 +11,7 @@ const actionValidationSchema = Joi.object({
 
 // Joi validation for Preferences Schema
 const preferencesValidationSchema = Joi.object({
-  hand: Joi.string().valid("Left", "Right"),
+  hand: Joi.string().valid("Left", "Right").required(),
   calibration: Joi.number().default(1).min(0),
 });
 
