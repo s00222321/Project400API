@@ -16,10 +16,10 @@ router.get('/users/:therapistId', async (req, res) => {
     }
 });
 
-// Get user details (Protected route)
+// get user details - protected route
 router.get('/user', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password'); // Exclude the password
+        const user = await User.findById(req.user.id).select('-password'); // exclude the password
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -29,7 +29,7 @@ router.get('/user', authenticateToken, async (req, res) => {
     }
 });
 
-// Get user preferences (Protected route)
+// get user preferences - protected route
 router.get('/preferences', authenticateToken, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
@@ -42,7 +42,7 @@ router.get('/preferences', authenticateToken, async (req, res) => {
     }
 });
 
-// Update user preferences (Protected route)
+// update user preferences - protected route
 router.put('/preferences', authenticateToken, async (req, res) => {
     const { error } = validatePreferences(req.body.preferences);
     if (error) {
@@ -63,7 +63,7 @@ router.put('/preferences', authenticateToken, async (req, res) => {
     }
 });
 
-// User register
+// user register
 router.post('/register-user', async (req, res) => {
     const { username, password, therapistId, hand} = req.body;
     try {

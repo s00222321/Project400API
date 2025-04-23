@@ -5,7 +5,7 @@ const Action = require("../models/Action");
 const { validateAction } = require('../models/validation');
 const { spawn } = require("child_process");
 
-// Save action to database
+// save action to database
 router.post("/save-action", authenticateToken, async (req, res) => {
   const { error } = validateAction(req.body);
   if (error) {
@@ -13,7 +13,7 @@ router.post("/save-action", authenticateToken, async (req, res) => {
   }
 
   const { timestamp, reactionTime, finger, hand, gameMode } = req.body;
-  const userId = req.user.id; // Extract userId from the authenticated user
+  const userId = req.user.id; // extract userId from the authenticated user
 
   try {
     const newAction = new Action({
@@ -33,12 +33,12 @@ router.post("/save-action", authenticateToken, async (req, res) => {
   }
 });
 
-// Fetch all actions from database
+// fetch all actions from database
 router.get("/get-actions/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // Fetch actions from database and sort by 'timestamp' in descending order
+    // fetch actions from database and sort by 'timestamp' in descending order
     const actions = await Action.find({ userId }).sort({ timestamp: -1 });
 
     res.status(200).json({ data: actions });
@@ -48,7 +48,7 @@ router.get("/get-actions/:userId", async (req, res) => {
   }
 });
 
-// Fetch all actions from database
+// fetch all actions from database
 router.get("/get-actions", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -63,7 +63,7 @@ router.get("/get-actions", authenticateToken, async (req, res) => {
 router.get("/trends/:userId", async (req, res) => {
   const { userId } = req.params;
 
-  // Spawn the Python process with the userId as an argument
+  // spawn the Python process with the userId as an argument
   const python = spawn("python", ["./scripts/trends.py", userId]);
 
   let dataString = "";

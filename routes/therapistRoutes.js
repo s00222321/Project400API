@@ -3,10 +3,10 @@ const router = express.Router();
 const authenticateToken = require('../middleware/authMiddleware');
 const Therapist = require('../models/Therapist');
 
-// Get user details (Protected route)
+// get user details - protected route
 router.get('/therapist', authenticateToken, async (req, res) => {
     try {
-        const user = await Therapist.findById(req.user.id).select('-password'); // Exclude the password
+        const user = await Therapist.findById(req.user.id).select('-password'); // exclude the password
         if (!user) {
             return res.status(404).json({ message: 'Therapist not found' });
         }

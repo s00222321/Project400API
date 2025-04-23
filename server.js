@@ -20,7 +20,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Rate limiting
+// rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100 // limit each IP to 100 requests per windowMs
@@ -34,7 +34,7 @@ app.use(helmet.hsts({
   preload: true
 }));
 
-// Add security headers
+// add security headers
 app.use((req, res, next) => {
   res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -50,7 +50,7 @@ app.use(errorHandler);
 // CORS Configuration based on environment
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
+    // allow requests with no origin (like mobile apps or curl requests)
     const allowedOrigins = [
       process.env.CLIENT_URL_PROD,      // production frontend URL
       process.env.CLIENT_URL_DEV,       // development frontend URL (localhost)
@@ -67,16 +67,16 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-// Apply CORS with the configured options
+// apply CORS with the configured options
 app.use(cors(corsOptions));
 
-// Apply rate limiting to all routes
+// apply rate limiting to all routes
 app.use(limiter);
 
-// Prevent NoSQL Injection & Sanitize Data
+// prevent NoSQL injection and sanitise data
 app.use(mongoSanitize());
 
-// Prevent XSS attacks
+// prevent XSS attacks
 app.use(xss());
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
@@ -90,7 +90,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/therapist', therapistRoutes);
 
-// Health check endpoint
+// health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
@@ -107,7 +107,7 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Error handling for MongoDB connection
+// error handling for MongoDB connection
 mongoose.connection.on('error', (err) => {
   console.error('MongoDB connection error:', err);
 });
@@ -116,7 +116,7 @@ mongoose.connection.on('disconnected', () => {
   console.log('MongoDB disconnected');
 });
 
-// Graceful shutdown
+// graceful shutdown
 process.on('SIGINT', async () => {
   try {
     await mongoose.connection.close();
@@ -128,13 +128,13 @@ process.on('SIGINT', async () => {
   }
 });
 
-// Start the server
+// start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
 
-// Global error handler
+// global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
@@ -145,14 +145,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Handle unhandled promise rejections
+// handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
-// Handle uncaught exceptions
+// handle uncaught exceptions
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
-  // Gracefully shutdown the server
+  // gracefully shutdown the server
   process.exit(1);
 });

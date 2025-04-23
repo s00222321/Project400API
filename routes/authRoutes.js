@@ -6,27 +6,27 @@ const User = require('../models/User');
 const Therapist = require('../models/Therapist');
 const { validateLogin, validateRegister } = require('../models/validation.js');
 
-// Therapist sign-up
+// therapist sign-up
 // routes/authRoutes.js
 router.post('/register-therapist', async (req, res) => {
     try {
-        // Validate registration data
+        // validate registration data
         const { error } = validateRegister(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
 
-        // Hash password
+        // hash password
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-        // Create new therapist
+        // create new therapist
         const therapist = new Therapist({
             username: req.body.username,
             password: hashedPassword,
             email: req.body.email
         });
 
-        // Save therapist
+        // save therapist
         await therapist.save();
         res.status(201).json({ message: 'Therapist registered successfully!' });
 
@@ -38,9 +38,9 @@ router.post('/register-therapist', async (req, res) => {
     }
 });
 
-// Therapist login
+// therapist login
 router.post('/login-therapist', async (req, res) => {
-    // Validate login data
+    // validate login data
     const { error } = validateLogin(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
@@ -58,9 +58,9 @@ router.post('/login-therapist', async (req, res) => {
     }
 });
 
-// User login
+// user login
 router.post('/login-user', async (req, res) => {
-    // Validate login data
+    // validate login data
     const { error } = validateLogin(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
