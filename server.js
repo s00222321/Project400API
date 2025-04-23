@@ -48,23 +48,23 @@ app.use(bodyParser.json());
 app.use(errorHandler);
 
 // CORS Configuration based on environment
+const allowedOrigins = [
+  process.env.CLIENT_URL_PROD,
+  process.env.CLIENT_URL_DEV,
+];
+
 const corsOptions = {
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
-    const allowedOrigins = [
-      process.env.CLIENT_URL_PROD,      // production frontend URL
-      process.env.CLIENT_URL_DEV,       // development frontend URL (localhost)
-    ];
-    
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // allow requests from known origins or mobile apps (which send no origin)
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 // apply CORS with the configured options
