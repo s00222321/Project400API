@@ -40,6 +40,7 @@ router.post('/register-therapist', async (req, res) => {
 
 // therapist login
 router.post('/login-therapist', async (req, res) => {
+    console.log('here');
     // validate login data
     const { error } = validateLogin(req.body);
     if (error) {
@@ -61,6 +62,7 @@ router.post('/login-therapist', async (req, res) => {
 // user login
 router.post('/login-user', async (req, res) => {
     // validate login data
+    console.log('here');
     const { error } = validateLogin(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
