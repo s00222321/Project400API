@@ -55,7 +55,10 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin) || origin === 'null') {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else if (origin === undefined) {
+      // This covers native apps which send no origin
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -65,6 +68,11 @@ const corsOptions = {
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
+
+app.use((req, res, next) => {
+  console.log("Origin Header:", req.headers.origin);
+  next();
+});
 
 // apply CORS with the configured options
 app.use(cors(corsOptions));
