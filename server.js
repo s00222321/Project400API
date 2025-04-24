@@ -69,11 +69,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-app.use((req, res, next) => {
-  console.log("Origin Header:", req.headers.origin);
-  next();
-});
-
 // apply CORS with the configured options
 app.use(cors(corsOptions));
 
